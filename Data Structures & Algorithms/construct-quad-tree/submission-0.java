@@ -1,0 +1,67 @@
+/*
+// Definition for a QuadTree node.
+class Node {
+    public boolean val;
+    public boolean isLeaf;
+    public Node topLeft;
+    public Node topRight;
+    public Node bottomLeft;
+    public Node bottomRight;
+
+    
+    public Node() {
+        this.val = false;
+        this.isLeaf = false;
+        this.topLeft = null;
+        this.topRight = null;
+        this.bottomLeft = null;
+        this.bottomRight = null;
+    }
+    
+    public Node(boolean val, boolean isLeaf) {
+        this.val = val;
+        this.isLeaf = isLeaf;
+        this.topLeft = null;
+        this.topRight = null;
+        this.bottomLeft = null;
+        this.bottomRight = null;
+    }
+    
+    public Node(boolean val, boolean isLeaf, Node topLeft, Node topRight, Node bottomLeft, Node bottomRight) {
+        this.val = val;
+        this.isLeaf = isLeaf;
+        this.topLeft = topLeft;
+        this.topRight = topRight;
+        this.bottomLeft = bottomLeft;
+        this.bottomRight = bottomRight;
+    }
+}
+*/
+
+class Solution {
+    public Node construct(int[][] grid) {
+        return depthFirstSearch(grid, grid.length, 0, 0);
+    }
+
+    private Node depthFirstSearch(int[][] grid, int size, int row, int col) {
+        boolean allSame = true;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (grid[row][col] != grid[row + i][col + j]) {
+                    allSame = false;
+                    break;
+                }
+            }
+        }
+        if (allSame) {
+            return new Node(grid[row][col] == 1, true);
+        }
+        int middle = size / 2;
+        Node topLeft = depthFirstSearch(grid, middle, row, col);
+        Node topRight = depthFirstSearch(grid, middle, row, col + middle);
+        Node bottomLeft = depthFirstSearch(grid, middle, row + middle, col);
+        Node bottomRight = depthFirstSearch(grid, middle, row + middle, col + middle);
+
+        return new Node(false, false, topLeft, topRight, bottomLeft, bottomRight);
+    }
+}
